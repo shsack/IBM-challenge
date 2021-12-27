@@ -1,6 +1,4 @@
 # References
-
-#### Here we will list all the useful references for the final result
 ----
 
 Title:  Quantum computers as universal quantum simulators: state-of-art and perspectives
