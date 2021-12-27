@@ -29,8 +29,7 @@ from trotter_functions import *
 
 
 ###################### EXACT ########################
-#####################################################
-
+""
 ## Function to simulate the system exactly
 
 def H_heis3():
@@ -65,15 +64,13 @@ probs_110_exact = [np.abs((~initial_state @ U_heis3(float(t)) @ initial_state).e
 
 
 ##################### TROTTER #######################
-#####################################################
-
-
+""
 ## Here we create the circuit for the Trotterisation
 
 
 t = Parameter('t')
 num_qubits = 3
-trotter_steps = 4  
+trotter_steps = 15  
 
 
 ## For the simulation
@@ -84,8 +81,8 @@ probs_110_trott = []
 for target_time in ts:
 
     ## Now create the circuit at different times
-    #Trot_qc = Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,t,target_time).to_instruction()
-    Trot_qc = Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,t,target_time).to_instruction()
+    Trot_qc = Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,t,target_time).to_instruction()
+    #Trot_qc = Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,t,target_time).to_instruction()
 
     ## Create the circuit
 
@@ -117,3 +114,6 @@ plt.title(r'Evolution of state $|110\rangle$')
 plt.legend()
 plt.grid()
 plt.show()
+
+""
+
