@@ -1,22 +1,22 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Import qubit states Zero (|0>) and One (|1>), and Pauli operators (X, Y, Z)
-from qiskit.opflow import Zero, One, I, X, Y, Z
-
 # Suppress warnings
 import warnings
 warnings.filterwarnings('ignore')
 
 # Importing standard Qiskit modules
-from qiskit import QuantumCircuit, QuantumRegister, IBMQ, execute, transpile
-from qiskit.providers.aer import QasmSimulator
-from qiskit.tools.monitor import job_monitor
-from qiskit.circuit import Parameter
+from qiskit                               import QuantumCircuit, QuantumRegister, IBMQ, execute, transpile
+from qiskit.providers.aer                 import QasmSimulator
+from qiskit.tools.monitor                 import job_monitor
+from qiskit.circuit                       import Parameter
+
+# Import qubit states Zero (|0>) and One (|1>), and Pauli operators (X, Y, Z)
+from qiskit.opflow                        import Zero, One, I, X, Y, Z
 
 # Import state tomography modules
 from qiskit.ignis.verification.tomography import state_tomography_circuits, StateTomographyFitter
-from qiskit.quantum_info import state_fidelity
+from qiskit.quantum_info                  import state_fidelity
 
 
 def R_xx(t):
@@ -137,7 +137,6 @@ def Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,p,target_time
 
 	Trot_gate = Trot_qc.to_instruction()
 
-
 	# Initialize quantum circuit for 3 qubits
 	qr = QuantumRegister(num_qubits)
 	qc = QuantumCircuit(qr)
@@ -153,10 +152,13 @@ def Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,p,target_time
 
 	return qc
 
-def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,p,target_time):
+def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,target_time):
 
 	dt = target_time/trotter_steps
 	
+	p   = Parameter('dt')
+	ep  = Parameter('2dt')
+	eep = Parameter('3dt')
 	
 	# Combine subcircuits into a single multiqubit gate representing a single trotter step
 
@@ -164,11 +166,16 @@ def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,p,target_time
 	Trot_qr = QuantumRegister(num_qubits)
 	Trot_qc = QuantumCircuit(Trot_qr, name='Trot')
 	
-	Trot_qc.append(R_xyz(2*p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
 	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
-	Trot_qc.append(R_xyz(3*p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
 	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
 	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
 	# Now repeat the circuit #trotter_reps
 
 	Trot_gate = Trot_qc.to_instruction()
@@ -185,7 +192,8 @@ def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,p,target_time
 	qc.barrier()
 
 	# Evaluate simulation at target_time meaning each trotter step evolves pi/trotter_steps in time
-	qc = qc.bind_parameters({p: dt})
+	#qc = qc.bind_parameters({p: dt,ep:2*dt,eep:3*dt})
+	qc = qc.bind_parameters({p:dt})
 
 	return qc
 

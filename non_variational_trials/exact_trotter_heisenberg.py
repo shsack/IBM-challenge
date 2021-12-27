@@ -69,8 +69,9 @@ probs_110_exact = [np.abs((~initial_state @ U_heis3(float(t)) @ initial_state).e
 
 
 t = Parameter('t')
-num_qubits = 3
-trotter_steps = 15  
+num_qubits    = 3
+trotter_steps = 4
+ybe_steps     = 4
 
 
 ## For the simulation
@@ -78,34 +79,52 @@ trotter_steps = 15
 target_wfn = One^One^Zero
 
 probs_110_trott = []
+probs_110_ybe   = []
+
 for target_time in ts:
 
     ## Now create the circuit at different times
-    Trot_qc = Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,t,target_time).to_instruction()
-    #Trot_qc = Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,t,target_time).to_instruction()
+    Trot_qc  = Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,t,target_time).to_instruction()
+    ybe_qc   = Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,ybe_steps,target_time).to_instruction()
 
-    ## Create the circuit
 
-    qr = QuantumRegister(num_qubits)
-    qc = QuantumCircuit(qr)
+    ## Create the Trotter circuit
 
-    qc.x([1,2])
-    qc.append(Trot_qc, [qr[0], qr[1], qr[2]])
+    t_qr = QuantumRegister(num_qubits)
+    t_qc = QuantumCircuit(t_qr)
 
-    #print(qc.decompose().decompose().decompose())
-    #exit()
-    
-    wfn = CircuitStateFn(qc)
+    t_qc.x([1,2])
+    t_qc.append(Trot_qc, [t_qr[0], t_qr[1], t_qr[2]])
 
-    ovp = np.abs((~target_wfn@wfn).eval())**2
+    ## Create the YBE compressed circuit
 
-    probs_110_trott.append(ovp)
+    y_qr = QuantumRegister(num_qubits)
+    y_qc = QuantumCircuit(y_qr)
+    y_qc.x([1,2])
+    y_qc.append(ybe_qc, [y_qr[0], y_qr[1], y_qr[2]])
+
+    if target_time == 0:
+        print(t_qc.decompose().decompose())
+        print(y_qc.decompose().decompose())
+
+
+    ## Create the wfns    
+    t_wfn = CircuitStateFn(t_qc)
+    y_wfn = CircuitStateFn(y_qc)
+
+    ## Calculate overlaps
+    t_ovp = np.abs((~target_wfn@t_wfn).eval())**2
+    y_ovp = np.abs((~target_wfn@y_wfn).eval())**2
+
+    probs_110_trott.append(t_ovp)
+    probs_110_ybe.append(y_ovp)
 
 
 
 ### now plot the result
 plt.plot(ts, probs_110_exact,linestyle="dashed",color="black",label="Exact")
-plt.plot(ts,probs_110_trott,label="Trotter n= "+str(trotter_steps))
+plt.plot(ts,probs_110_trott,label="Trotter n= "+str(trotter_steps),marker="o",color="C0")
+plt.plot(ts,probs_110_ybe,label="YBE compression",marker="^",color="C1")
 
 
 plt.xlabel(r'$t$')
