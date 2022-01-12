@@ -30,7 +30,7 @@ URL: https://arxiv.org/pdf/2112.01690.pdf
 
 Tip: Application of the Yang-Baxter equivalence in the Heisenberg model
 
---
+-----
 
 Title: Faster quantum simulation by randomization
 
