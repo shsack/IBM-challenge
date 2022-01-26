@@ -82,6 +82,16 @@ function IBM_challenge_ansatz(n,depth,params)
 	push!(circ,Rxyz(n,1,2,params[count:count+2]))
 	count += 3
 
+	push!(circ,Rxyz(n,2,3,params[count:count+2]))
+	count += 3
+
+	push!(circ,Rxyz(n,1,2,params[count:count+2]))
+	count += 3
+
+	push!(circ,Rxyz(n,2,3,params[count:count+2]))
+	count += 3
+
+
 	return circ
 end
 
