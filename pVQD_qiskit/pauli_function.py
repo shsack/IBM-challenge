@@ -124,11 +124,9 @@ def generate_heisenberg(n_spins,Jx,Jy,Jz):
 
 	H = PauliOp(x_list[0],Jx) + PauliOp(y_list[0],Jy) + PauliOp(z_list[0],Jz)
 
-	for i in range(1,len(int_list)):
-		H = H + PauliOp(int_list[i],int_coeff[i])
+	for i in range(1,len(x_list)):
+		H = H + PauliOp(x_list[i],Jx) + PauliOp(y_list[i],Jy) + PauliOp(z_list[i],Jz)
 
-	for i in range(len(field_list)):
-		H = H + PauliOp(field_list[i],field_coeff[i])
 
 	return H
 
