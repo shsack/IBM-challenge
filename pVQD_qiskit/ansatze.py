@@ -1,9 +1,9 @@
-## These file will contain all the ansatze used for variational quantum simulation
+# # These file will contain all the ansatze used for variational quantum simulation
 
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 
 
-#=========================================
+# =========================================
 
 def hweff_ansatz(n_spins,depth,p):
 	
@@ -51,7 +51,7 @@ def hweff_ansatz(n_spins,depth,p):
 
 	return circuit
 
-#==========================================
+# ==========================================
 
 def challenge_ansatz(n_spins,depth,p):
 

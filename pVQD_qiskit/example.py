@@ -31,7 +31,7 @@ ths = 0.99999
 depth = 4
 
 
-### Example circ
+# ## Example circ
 
 ex_params = np.zeros(3*(depth)*(spins-1))
 wfn = challenge_ansatz(spins,depth,ex_params)
@@ -69,7 +69,7 @@ for (name,pauli) in obs.items():
 	print(pauli)
 
 
-### Initialize the algorithm
+# ## Initialize the algorithm
 
 # Choose a specific set of parameters
 initial_point = None
