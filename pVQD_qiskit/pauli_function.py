@@ -101,8 +101,9 @@ def generate_heisenberg(n_spins,Jx,Jy,Jz):
 	'''
 	Args:
 		n_spins (integer)
-		coup    (float)
-		field   (float)
+		Jx    (float)
+		Jy    (float)
+		Jz    (float)
 		
 	Returns:
 		Hamiltonian of Heisenberg model with XX, YY and ZZ interaction 
@@ -118,8 +119,6 @@ def generate_heisenberg(n_spins,Jx,Jy,Jz):
 		y_list.append(generate_pauli([i,i+1],[i,i+1],n_spins))
 		z_list.append(generate_pauli([],[i,i+1],n_spins))
 
-	for i in range(n_spins):
-		field_list.append(generate_pauli([i],[],n_spins))
 
 
 	H = PauliOp(x_list[0],Jx) + PauliOp(y_list[0],Jy) + PauliOp(z_list[0],Jz)

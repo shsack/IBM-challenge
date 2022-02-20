@@ -70,7 +70,7 @@ probs_110_exact = [np.abs((~initial_state @ U_heis3(float(t)) @ initial_state).e
 
 t = Parameter('t')
 num_qubits    = 3
-trotter_steps = 4
+trotter_steps = 8
 ybe_steps     = 4
 
 
@@ -124,7 +124,7 @@ for target_time in ts:
 ### now plot the result
 plt.plot(ts, probs_110_exact,linestyle="dashed",color="black",label="Exact")
 plt.plot(ts,probs_110_trott,label="Trotter n= "+str(trotter_steps),marker="o",color="C0")
-plt.plot(ts,probs_110_ybe,label="YBE compression",marker="^",color="C1")
+#plt.plot(ts,probs_110_ybe,label="YBE compression",marker="^",color="C1")
 
 
 plt.xlabel(r'$t$')

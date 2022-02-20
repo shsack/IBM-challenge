@@ -25,6 +25,8 @@ g       = 1.0
 dt      = 0.05
 n_steps = 40
 
+Jx = Jy = Jz = 1.0
+
 # Algorithm parameters
 
 ths = 0.99999
@@ -34,17 +36,17 @@ depth = 4
 # ## Example circ
 
 ex_params = np.zeros(3*(depth)*(spins-1))
-wfn = challenge_ansatz(spins,depth,ex_params)
+wfn       = challenge_ansatz(spins,depth,ex_params)
 
 
 ### Shift
-shift  = np.array(len(ex_params)*[0.01])
+shift  = np.array(len(ex_params)*[0.005])
 
 print("Initial shift:",shift)
 
 
 ### Generate the Hamiltonian
-H = generate_ising(spins,V,g)
+H = generate_heisenberg(spins,Jx,Jy,Jz)
 
 print(wfn)
 print(H)
@@ -75,7 +77,7 @@ for (name,pauli) in obs.items():
 initial_point = None
 
 # Choose the gradient optimizer: 'sgd', 'adam'
-opt  = 'sgd'
+opt  = 'adam'
 # Choose how to estimate the gradient on hardware: 'param_shift', 'spsa'
 grad = 'param_shift'
 # Choose which type of cost function use: 'global', 'local'
@@ -83,7 +85,7 @@ cost = 'global'
 
 
 algo = pVQD(hamiltonian   = H,
-			ansatz        = hweff_ansatz,
+			ansatz        = challenge_ansatz,
 			ansatz_reps   = depth,
 			parameters    = ex_params,
 			initial_shift = shift,

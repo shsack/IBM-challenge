@@ -1,5 +1,5 @@
 # # These file will contain all the ansatze used for variational quantum simulation
-
+import numpy as np
 from qiskit import QuantumCircuit, ClassicalRegister, QuantumRegister
 
 
@@ -57,6 +57,9 @@ def challenge_ansatz(n_spins,depth,p):
 
 	circ = QuantumCircuit(n_spins)
 	count = 0
+
+	circ.x(0)
+	circ.x(1)
 
 	for d in range(depth):
 		for i in range(n_spins-1):
