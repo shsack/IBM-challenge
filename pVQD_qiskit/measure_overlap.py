@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 plt.rcParams.update({'font.size': 12})  # enlarge matplotlib fonts
 
 # Import qubit states Zero (|0>) and One (|1>), and Pauli operators (X, Y, Z)
@@ -22,6 +23,10 @@ from qiskit.ignis.verification.tomography import state_tomography_circuits, Stat
 from qiskit.quantum_info                  import state_fidelity
 
 
+
+## Import ansatze
+
+from ansatze import *
 
 ###################### EXACT ########################
 
@@ -59,13 +64,16 @@ probs_110_exact = [np.abs((~initial_state @ U_heis3(float(t)) @ initial_state).e
 
 def measure_overlap_target(target,ansatz,param_list):
 
-	ovp_list = []
-	for i in range(length(param_list)):
-		t_ovp = np.abs((~target_wfn@t_wfn).eval())**2
+    ovp_list = []
+    
+    for params in param_list:
+        circ  = ansatz(3,4,params)
+        t_wfn = CircuitStateFn(circ)
+        t_ovp = np.abs((~target@t_wfn).eval())**2
 
-	return ovp_list
+        ovp_list.append(t_ovp)
 
-
+    return ovp_list
 
 
 
@@ -79,8 +87,9 @@ data   = json.load(open('data/trial_results.dat'))
 
 pvqd_params = data["params"]
 pvqd_times  = data["times"]
-pvqd_ovps   = measure_overlap_target(One^One^Zero,ansatz,pvqd_params)
+pvqd_ovps   = measure_overlap_target(One^One^Zero,challenge_ansatz,pvqd_params)
 
+print(pvqd_params[-1])
 
 
 plt.plot(ts, probs_110_exact,linestyle="dashed",color="black",label="Exact")

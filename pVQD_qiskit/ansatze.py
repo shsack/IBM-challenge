@@ -58,7 +58,7 @@ def challenge_ansatz(n_spins,depth,p):
 	circ = QuantumCircuit(n_spins)
 	count = 0
 
-	circ.x(0)
+	circ.x(2)
 	circ.x(1)
 
 	for d in range(depth):

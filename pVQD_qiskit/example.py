@@ -22,14 +22,14 @@ from ansatze        import *
 spins   = 3
 V       = 0.25
 g       = 1.0
-dt      = 0.05
-n_steps = 40
+dt      = 0.0523
+n_steps = 60
 
 Jx = Jy = Jz = 1.0
 
 # Algorithm parameters
 
-ths = 0.99999
+ths = 0.9999
 depth = 4
 
 
@@ -95,7 +95,7 @@ algo = pVQD(hamiltonian   = H,
 algo.run(ths,dt,n_steps, 
 	     obs_dict      = obs,
 	     filename      = 'data/trial_results.dat',
-	     max_iter      = 50,
+	     max_iter      = 100,
 	     opt           = opt,
 	     cost_fun      = cost,
 	     grad          = grad,
