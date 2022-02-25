@@ -92,9 +92,9 @@ def Heisenberg_Trotter_1st_ord(num_qubits,trotter_steps,p,target_time):
 	Trot_qc = QuantumCircuit(Trot_qr, name='Trot')
 	
 	for i in range(0, num_qubits - 1):
-	    Trot_qc.append(ZZ, [Trot_qr[i], Trot_qr[i+1]])
-	    Trot_qc.append(YY, [Trot_qr[i], Trot_qr[i+1]])
-	    Trot_qc.append(XX, [Trot_qr[i], Trot_qr[i+1]])
+		Trot_qc.append(ZZ, [Trot_qr[i], Trot_qr[i+1]])
+		Trot_qc.append(YY, [Trot_qr[i], Trot_qr[i+1]])
+		Trot_qc.append(XX, [Trot_qr[i], Trot_qr[i+1]])
 	
 	# Now repeat the circuit #trotter_reps
 
@@ -108,8 +108,8 @@ def Heisenberg_Trotter_1st_ord(num_qubits,trotter_steps,p,target_time):
 
 	# Simulate time evolution under H_heis3 Hamiltonian
 	for _ in range(trotter_steps):
-  	  qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
-  	  qc.barrier()
+		qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
+		qc.barrier()
 
 	# Evaluate simulation at target_time meaning each trotter step evolves pi/trotter_steps in time
 	qc = qc.bind_parameters({p: dt})
@@ -131,7 +131,7 @@ def Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,p,target_time
 	Trot_qc = QuantumCircuit(Trot_qr, name='Trot')
 	
 	for i in range(0, num_qubits - 1):
-	    Trot_qc.append(XYZ, [Trot_qr[i], Trot_qr[i+1]])
+		Trot_qc.append(XYZ, [Trot_qr[i], Trot_qr[i+1]])
 	
 	# Now repeat the circuit #trotter_reps
 
@@ -144,13 +144,27 @@ def Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,p,target_time
 
 	# Simulate time evolution under H_heis3 Hamiltonian
 	for _ in range(trotter_steps):
-  	  qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
-  	  qc.barrier()
+		qc.append(Trot_gate, [qr[0], qr[1], qr[2]])		
+		qc.barrier()
 
 	# Evaluate simulation at target_time meaning each trotter step evolves pi/trotter_steps in time
 	qc = qc.bind_parameters({p: dt})
 
 	return qc
+
+
+def Heisenberg_Trotter_1st_ord_compressed_variational(num_qubits, trotter_steps, theta):
+	
+	# Initialize quantum circuit for 3 qubits
+	qr = QuantumRegister(num_qubits)
+	qc = QuantumCircuit(qr)
+
+	# Simulate time evolution under H_heis3 Hamiltonian
+	for trotter_step in range(trotter_steps):	
+		for i in range(0, num_qubits - 1):
+			qc.append(R_xyz(theta[trotter_step]).to_instruction(), [qr[i], qr[i+1]])
+	return qc
+
 
 def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,target_time):
 
