@@ -19,7 +19,7 @@ from qiskit.opflow.expectations   import PauliExpectation, AerPauliExpectation
 from qiskit.opflow.primitive_ops  import CircuitOp
 from qiskit.opflow                import Z, I
 
-from pauli_function import *
+#from pauli_function import *
 
 
 
