@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -48,7 +47,6 @@ def R_yy(t):
 	return YY_qc
 
 
-
 def R_zz(t):
 
 	ZZ_qr = QuantumRegister(2)
@@ -77,7 +75,27 @@ def R_xyz(t):
 
 	return XYZ_qc
 
-def Heisenberg_Trotter_1st_ord(num_qubits,trotter_steps,p,target_time):
+def R_xyz_var(p):
+    
+    XYZ_qr = QuantumRegister(2)
+    XYZ_qc = QuantumCircuit(XYZ_qr, name='XYZ-var')
+    
+    XYZ_qc.cnot(0,1)
+    XYZ_qc.rx(p[0], 0)
+    XYZ_qc.rx(-np.pi/2, 0)
+    XYZ_qc.rz(p[1], 1)
+    XYZ_qc.h(0)
+    XYZ_qc.cnot(0,1)
+    XYZ_qc.h(0)
+    XYZ_qc.rz(p[2], 1)
+    XYZ_qc.cnot(0,1)
+    XYZ_qc.rx(np.pi/2,0)
+    XYZ_qc.rx(-np.pi/2,1)
+
+    return XYZ_qc
+
+
+def Heisenberg_Trotter(num_qubits,trotter_steps,p,target_time):
 
 	dt = target_time/trotter_steps
 
@@ -118,7 +136,7 @@ def Heisenberg_Trotter_1st_ord(num_qubits,trotter_steps,p,target_time):
 	return qc
 
 
-def Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,p,target_time):
+def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,p,target_time):
 
 	dt = target_time/trotter_steps
 
@@ -154,7 +172,48 @@ def Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,p,target_time
 	return qc
 
 
-def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,target_time):
+def Heisenberg_Trotter_variational(num_qubits,trotter_steps,p):
+
+    circ = QuantumCircuit(num_qubits)
+    count = 0
+
+    circ.x([1,2])
+
+    for d in range(trotter_steps):
+        for i in range(num_qubits-1):
+            circ.cx(i,i+1)
+            circ.rx(p[count],i)
+            circ.rx(-np.pi/2,i)
+            circ.h(i)
+            circ.rz(p[count+1],i+1)
+
+            circ.cx(i,i+1)
+            circ.h(i)
+            circ.rz(p[count+2],i+1)
+
+            circ.cx(i,i+1)
+            circ.rx(np.pi/2,i)
+            circ.rx(-np.pi/2,i+1)
+
+            count += 3
+
+    return circ
+
+
+def Heisenberg_Trotter_compressed_variational(num_qubits, trotter_steps, theta):
+	
+	# Initialize quantum circuit for 3 qubits
+	qr = QuantumRegister(num_qubits)
+	qc = QuantumCircuit(qr)
+
+	# Simulate time evolution under H_heis3 Hamiltonian
+	for trotter_step in range(trotter_steps):	
+		for i in range(0, num_qubits - 1):
+			qc.append(R_xyz(theta[trotter_step]).to_instruction(), [qr[i], qr[i+1]])
+	return qc
+
+
+def Heisenberg_Trotter_YBE_4steps(num_qubits,trotter_steps,target_time):
 
 	dt = target_time/trotter_steps
 	
@@ -198,45 +257,5 @@ def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,target_time):
 	qc = qc.bind_parameters({p:dt})
 
 	return qc
-
-
-
-###################################################
-# ##### Begin variational circuit, keeping it simple (please do not delete)
-# ##################################################
-
-
-def Heisenberg_Trotter_1st_ord_compressed_variational(num_qubits, trotter_steps, theta):
-	
-	# Initialize quantum circuit for 3 qubits
-	qr = QuantumRegister(num_qubits)
-	qc = QuantumCircuit(qr)
-
-	# Simulate time evolution under H_heis3 Hamiltonian
-	for trotter_step in range(trotter_steps):	
-		for i in range(0, num_qubits - 1):
-			qc.append(R_xyz(theta[trotter_step]).to_instruction(), [qr[i], qr[i+1]])
-	return qc
-
-
-def Heisenberg_Trotter_1st_ord_compressed_variational_YBE(num_qubits, θ2):
-    
-	qr = QuantumRegister(num_qubits)
-	qc = QuantumCircuit(qr)
-
-	# CNOTS between qubit 3&5 have less errors!
-	qc.append(R_xyz(θ2[0]).to_instruction(), [qr[1], qr[2]])
-	qc.append(R_xyz(θ2[1]).to_instruction(), [qr[0], qr[1]])
-	qc.append(R_xyz(θ2[2]).to_instruction(), [qr[1], qr[2]])
-	qc.append(R_xyz(θ2[3]).to_instruction(), [qr[0], qr[1]])
-	qc.append(R_xyz(θ2[4]).to_instruction(), [qr[1], qr[2]])
-
-	return qc
-
-
-###################################################
-# ##### End variational circuit (please do not delete) 
-# ##################################################
-
 
 
