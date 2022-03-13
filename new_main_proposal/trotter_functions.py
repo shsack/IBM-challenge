@@ -174,88 +174,39 @@ def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,p,target_time):
 
 def Heisenberg_Trotter_variational(num_qubits,trotter_steps,p):
 
-    circ = QuantumCircuit(num_qubits)
+    qr = QuantumRegister(num_qubits)
+	qc = QuantumCircuit(qr)
     count = 0
 
-    circ.x([1,2])
+    qc.rx(np.pi,[1,2])
 
     for d in range(trotter_steps):
         for i in range(num_qubits-1):
-            circ.cx(i,i+1)
-            circ.rx(p[count],i)
-            circ.rx(-np.pi/2,i)
-            circ.h(i)
-            circ.rz(p[count+1],i+1)
-
-            circ.cx(i,i+1)
-            circ.h(i)
-            circ.rz(p[count+2],i+1)
-
-            circ.cx(i,i+1)
-            circ.rx(np.pi/2,i)
-            circ.rx(-np.pi/2,i+1)
-
+        	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[i],qr[i+1]])
             count += 3
 
-    return circ
+    return qc
 
 
-def Heisenberg_Trotter_compressed_variational(num_qubits, trotter_steps, theta):
-	
-	# Initialize quantum circuit for 3 qubits
-	qr = QuantumRegister(num_qubits)
+
+def Heisenberg_YBE_variational(num_qubits,p):
+
+    qr = QuantumRegister(num_qubits)
 	qc = QuantumCircuit(qr)
 
-	# Simulate time evolution under H_heis3 Hamiltonian
-	for trotter_step in range(trotter_steps):	
-		for i in range(0, num_qubits - 1):
-			qc.append(R_xyz(theta[trotter_step]).to_instruction(), [qr[i], qr[i+1]])
-	return qc
+	count = 0
+    
+    qc.rx(np.pi,[1,2])
 
+    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
+    count += 3
+    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
+    count += 3
+    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
+    count += 3
+    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
+    count += 3
+    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
+    count += 3
 
-def Heisenberg_Trotter_YBE_4steps(num_qubits,trotter_steps,target_time):
-
-	dt = target_time/trotter_steps
-	
-	p   = Parameter('dt')
-	ep  = Parameter('2dt')
-	eep = Parameter('3dt')
-	
-	# Combine subcircuits into a single multiqubit gate representing a single trotter step
-
-	
-	Trot_qr = QuantumRegister(num_qubits)
-	Trot_qc = QuantumCircuit(Trot_qr, name='Trot')
-	
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
-
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
-
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
-	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
-	# Now repeat the circuit #trotter_reps
-
-	Trot_gate = Trot_qc.to_instruction()
-
-
-	# Initialize quantum circuit for 3 qubits
-	qr = QuantumRegister(num_qubits)
-	qc = QuantumCircuit(qr)
-
-
-	# Simulate time evolution under H_heis3 Hamiltonian
-	
-	qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
-	qc.barrier()
-
-	# Evaluate simulation at target_time meaning each trotter step evolves pi/trotter_steps in time
-	#qc = qc.bind_parameters({p: dt,ep:2*dt,eep:3*dt})
-	qc = qc.bind_parameters({p:dt})
-
-	return qc
-
-
+    return qc
