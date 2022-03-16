@@ -174,39 +174,39 @@ def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,p,target_time):
 
 def Heisenberg_Trotter_variational(num_qubits,trotter_steps,p):
 
-    qr = QuantumRegister(num_qubits)
+	qr = QuantumRegister(num_qubits)
 	qc = QuantumCircuit(qr)
-    count = 0
+	count = 0
 
-    qc.rx(np.pi,[1,2])
+	qc.rx(np.pi,[1,2])
 
-    for d in range(trotter_steps):
-        for i in range(num_qubits-1):
-        	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[i],qr[i+1]])
-            count += 3
+	for d in range(trotter_steps):
+		for i in range(num_qubits-1):
+			qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[i],qr[i+1]])
+			count += 3
 
-    return qc
+	return qc
 
 
 
 def Heisenberg_YBE_variational(num_qubits,p):
 
-    qr = QuantumRegister(num_qubits)
+	qr = QuantumRegister(num_qubits)
 	qc = QuantumCircuit(qr)
 
 	count = 0
     
-    qc.rx(np.pi,[1,2])
+	qc.rx(np.pi,[1,2])
 
-    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
-    count += 3
-    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
-    count += 3
-    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
-    count += 3
-    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
-    count += 3
-    qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
-    count += 3
+	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
+	count += 3
+	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
+	count += 3
+	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
+	count += 3
+	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
+	count += 3
+	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
+	count += 3
 
-    return qc
+	return qc
