@@ -1,5 +1,5 @@
-## This script compress with YBE the entire time evolution
-## Showing the equivalence between 15 and 24 CNOTs at all times
+# # This script compress with YBE the entire time evolution
+# # Showing the equivalence between 15 and 24 CNOTs at all times
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -105,7 +105,7 @@ def overlap_and_gradient(right,state_wfn,parameters,expectator,sampler):
 
     return E,g 
 
-######################################################################
+# #####################################################################
 
 backend     = Aer.get_backend('statevector_simulator')
 instance    = QuantumInstance(backend=backend)
@@ -129,7 +129,7 @@ zero_prj       = StateFn(projector_zero(3),is_measurement = True)
 ybe_params = []
 #ybe_params.append(list(ybe_parameters))
 
-## Repeat the procedure for every time step
+# # Repeat the procedure for every time step
 
 for (t_step,sim_t) in enumerate(ts):
 
@@ -189,14 +189,14 @@ for (t_step,sim_t) in enumerate(ts):
 
 
 
-## Finally, save the data
+# # Finally, save the data
 
 
 log_data = {}
-    
+
 log_data['times']       = list(ts)
 log_data['params']      = list(ybe_params)
-        
+
 filename = "compression_trial.dat"
 json.dump(log_data, open( filename,'w+'))
 

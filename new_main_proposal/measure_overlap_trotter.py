@@ -1,4 +1,4 @@
-#### This scripts plot the overlap of YBE compression with |110> and compares it with Trotter
+# ### This scripts plot the overlap of YBE compression with |110> and compares it with Trotter
 
 import numpy as np
 import matplotlib.pyplot as plt

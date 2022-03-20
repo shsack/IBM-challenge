@@ -188,25 +188,37 @@ def Heisenberg_Trotter_variational(num_qubits,trotter_steps,p):
 	return qc
 
 
-
 def Heisenberg_YBE_variational(num_qubits,p):
 
-	qr = QuantumRegister(num_qubits)
-	qc = QuantumCircuit(qr)
-
-	count = 0
+    circ = QuantumCircuit(num_qubits)
+    count = 0
     
-	qc.rx(np.pi,[1,2])
+    def XYZ_variational(circ,i,j,params):
+        circ.cx(i,j)
+        circ.rx(params[0],i)
+        circ.rx(-np.pi/2,i)
+        circ.h(i)
+        circ.rz(params[1],j)
 
-	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
-	count += 3
-	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
-	count += 3
-	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
-	count += 3
-	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[0],qr[1]])
-	count += 3
-	qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[1],qr[2]])
-	count += 3
+        circ.cx(i,j)
+        circ.h(i)
+        circ.rz(params[2],j)
 
-	return qc
+        circ.cx(i,j)
+        circ.rx(np.pi/2,i)
+        circ.rx(-np.pi/2,j)
+
+    circ.rx(np.pi,[1,2])
+    
+    XYZ_variational(circ,1,2,p[count:count+3])
+    count += 3
+    XYZ_variational(circ,0,1,p[count:count+3])
+    count += 3
+    XYZ_variational(circ,1,2,p[count:count+3])
+    count += 3
+    XYZ_variational(circ,0,1,p[count:count+3])
+    count += 3
+    XYZ_variational(circ,1,2,p[count:count+3])
+    count += 3
+
+    return circ
