@@ -36,7 +36,7 @@ from qiskit.result.models import QobjExperimentHeader
 
 from itertools import chain
 
-## Now the main part of the script
+# # Now the main part of the script
 
 # Create the ansatz
 
