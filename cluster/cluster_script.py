@@ -34,7 +34,7 @@ from qiskit.result.models import ExperimentResult
 from qiskit.result.models import ExperimentResultData
 from qiskit.result.models import QobjExperimentHeader
 
-
+from itertools import chain
 
 ## Now the main part of the script
 
@@ -106,8 +106,8 @@ fqc.append(Heisenberg_YBE_variational(3,pvqd_opt_params), [fqr[1], fqr[3], fqr[5
 
 ## Info for IBM
 #IBMQ.save_account('MY_API_TOKEN')
-IBMQ.enable_account('MY_API_TOKEN')
-#IBMQ.load_account()
+#IBMQ.enable_account('MY_API_TOKEN')
+IBMQ.load_account()
 
 provider = IBMQ.get_provider(hub='ibm-q-community', group='ibmquantumawards', project='open-science-22')
 jakarta = provider.get_backend('ibmq_jakarta')
@@ -115,8 +115,8 @@ jakarta = provider.get_backend('ibmq_jakarta')
 sim_noisy_jakarta = QasmSimulator.from_backend(provider.get_backend('ibmq_jakarta'))
 
 shots = 8192
-#backend = sim_noisy_jakarta
-backend = jakarta
+backend = sim_noisy_jakarta
+#backend = jakarta
 
 # Compute the state tomography based on the st_qcs quantum circuits and the results from those ciricuits
 def state_tomo(result, st_qcs):
@@ -129,52 +129,59 @@ def state_tomo(result, st_qcs):
     fid = state_fidelity(rho_fit, target_state)
     return fid
 
-def zne_results(tomo_circs, backend, optimization_level, zne_order, shots,job_list):
+def zne_results(tomo_circs, backend, optimization_level, zne_order, shots, repetition_count):
 
     # This function runs the tomography circuits and unrolls the gates to increase the noise level
     # The counts that are obtained for the differnt noise levels are then extrapolated to the zero-noise level
 
     zne_result_list = []
     scale_factors = [1.0, 2.0, 3.0]
-    # Loop over the tomography circuits
-    for circ in tomo_circs:
 
-        print("\n\n############### Running the "+str(circ.name)+" circuit   ############### ")
-        job_list[str(circ.name)] = []
-        # Unfold the tomography circuit by a scale factor and evaluate them 
-        noise_scaled_circuits = [zne.scaling.fold_global(circ, s) for s in scale_factors]  
-        #result_list = [execute(circ_noise, backend=backend, optimization_level=optimization_level, shots=shots).result() for circ_noise in noise_scaled_circuits]
+    #print("\n\n############### Running the "+str(circ.name)+" circuit   ############### ")
+    #job_list[str(circ.name)] = []
 
-        result_list = []
-        pickle_file = "./hw_data/"+str(circ.name)
-        pickle_data = {}
-        for circ_noise in noise_scaled_circuits:
-            job = execute(circ_noise, backend=backend, optimization_level=optimization_level, shots=shots)
-            print(str(circ.name)+' circuit,Job ID', job.job_id())
-            job_res = job.result()
-            print(job_res)
-            result_list.append(job_res)
+    # Unfold the tomography circuit by a scale factor and evaluate them 
+    noise_scaled_circuits = [[zne.scaling.fold_global(circ, s) for s in scale_factors] for circ in tomo_circs] 
+    noise_scaled_circuits = list(chain(*noise_scaled_circuits)) 
 
-            ## Create pickle dictionary
-            pickle_file = pickle_file+"_"+str(job.job_id())
-            pickle_data[str(job.job_id())] = job_res
+    #############################################
+    #TODO: put transpile here according to Julien 
+    #############################################
+    
+    result = execute(noise_scaled_circuits, backend=backend, optimization_level=optimization_level, shots=shots).result()
+    count_list = result.get_counts()
+    ordered_bitstrings = dict(sorted(count_list[0].items()))
 
-            # Append to job list
-            job_list[str(circ.name)].append(str(job.job_id()))
+
+    pickle_file = "./hw_data/"+str(repetition_count)
+    #pickle_data = {}
+    for i in range(len(tomo_circs)):
+        counts_dict = {}
+
+        #job = execute(circ_noise, backend=backend, optimization_level=optimization_level, shots=shots)
+        #print(str(circ.name)+' circuit,Job ID', job.job_id())
+        #job_res = job.result()
+        #print(job_res)
+        #result_list.append(job_res)
+
+        ## Create pickle dictionary
+        #pickle_file = pickle_file+"_"+str(job.job_id())
+        #pickle_data[str(job.job_id())] = job_res
+
+        # Append to job list
+        #job_list[str(circ.name)].append(str(job.job_id()))
 
         # Dump on file
-        with open(pickle_file,'wb+') as f:
-            pickle.dump(pickle_data, f)
+        #with open(pickle_file,'wb+') as f:
+        #    pickle.dump(pickle_data, f)
 
-        counts_dict = {}
-        ordered_bitstrings = dict(sorted(result_list[0].get_counts().items()))
         # Loop over the results of the scaled circuits and collect the data in the correct form
         for key in ordered_bitstrings.keys():
-            counts_list = []
-            for result in result_list:
-                counts_list.append(result.get_counts()[key])
+            counts_list_zne = []
+            for count in count_list[i*len(scale_factors):len(scale_factors)*(i+1)]:
+                counts_list_zne.append(count[key])
             # Here we extrapolate the counts to zero noise and round to the closest integer 
-            zne_counts_value = int(zne.PolyFactory.extrapolate(scale_factors, counts_list, order=zne_order)) 
+            zne_counts_value = int(zne.PolyFactory.extrapolate(scale_factors, counts_list_zne, order=zne_order)) 
             if zne_counts_value < 0:
                 zne_counts_value = 0
             counts_dict[key] = zne_counts_value
@@ -198,7 +205,7 @@ job_list = {}
 for count in range(reps):
     print("\n\n\n\n REPETITION "+str(count+1)+"\n\n\n\n")
     
-    zne_res = zne_results(st_qcs, backend=backend, optimization_level=0, zne_order=2, shots=shots,job_list=job_list)
+    zne_res = zne_results(st_qcs, backend=backend, optimization_level=0, zne_order=2, shots=shots)
     fids.append(state_tomo(zne_res, st_qcs))
 
 ## Print the final result
