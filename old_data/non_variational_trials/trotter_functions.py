@@ -5,18 +5,22 @@ import matplotlib.pyplot as plt
 import warnings
 warnings.filterwarnings('ignore')
 
-# Importing basic Qiskit modules to create circuits
-from qiskit                               import QuantumCircuit, QuantumRegister
+# Importing standard Qiskit modules
+from qiskit                               import QuantumCircuit, QuantumRegister, IBMQ, execute, transpile
 from qiskit.providers.aer                 import QasmSimulator
+from qiskit.tools.monitor                 import job_monitor
 from qiskit.circuit                       import Parameter
 
+# Import qubit states Zero (|0>) and One (|1>), and Pauli operators (X, Y, Z)
+from qiskit.opflow                        import Zero, One, I, X, Y, Z
 
-# +
-## We start creating the functions for the circuit corresponding to useful 2-qubit gates
-# -
+# Import state tomography modules
+from qiskit.ignis.verification.tomography import state_tomography_circuits, StateTomographyFitter
+from qiskit.quantum_info                  import state_fidelity
+
 
 def R_xx(t):
-	# This function returns the circuit for R_xx(t), as indicated in eq. 34 of arXiv:1907.03505v2
+	# This function returns the circuit for R_xx(t)
 
 	XX_qr = QuantumRegister(2)
 	XX_qc = QuantumCircuit(XX_qr, name='XX')
@@ -30,7 +34,6 @@ def R_xx(t):
 	return XX_qc
 
 def R_yy(t):
-    # This function returns the circuit for R_yy(t), as indicated in eq. 33 of arXiv:1907.03505v2
 
 	YY_qr = QuantumRegister(2)
 	YY_qc = QuantumCircuit(YY_qr, name='YY')
@@ -44,8 +47,8 @@ def R_yy(t):
 	return YY_qc
 
 
+
 def R_zz(t):
-    # This function returns the circuit for R_zz(t), as indicated in eq. 32 of arXiv:1907.03505v2
 
 	ZZ_qr = QuantumRegister(2)
 	ZZ_qc = QuantumCircuit(ZZ_qr, name='ZZ')
@@ -57,8 +60,6 @@ def R_zz(t):
 	return ZZ_qc
 
 def R_xyz(t):
-    # This function returns optimal gate decomposition of e^(-it(XX+YY+ZZ)), 
-    # as indicated in Fig. 4b of arXiv:1907.03505v2
 	XYZ_qr = QuantumRegister(2)
 	XYZ_qc = QuantumCircuit(XYZ_qr, name='XYZ')
 	
@@ -75,31 +76,7 @@ def R_xyz(t):
 
 	return XYZ_qc
 
-def R_xyz_var(p):
-    
-    XYZ_qr = QuantumRegister(2)
-    XYZ_qc = QuantumCircuit(XYZ_qr, name='XYZ-var')
-    
-    XYZ_qc.cnot(0,1)
-    XYZ_qc.rx(p[0], 0)
-    XYZ_qc.rx(-np.pi/2, 0)
-    XYZ_qc.rz(p[1], 1)
-    XYZ_qc.h(0)
-    XYZ_qc.cnot(0,1)
-    XYZ_qc.h(0)
-    XYZ_qc.rz(p[2], 1)
-    XYZ_qc.cnot(0,1)
-    XYZ_qc.rx(np.pi/2,0)
-    XYZ_qc.rx(-np.pi/2,1)
-
-    return XYZ_qc
-
-
-# +
-## Now we create the Trotter circuit for the XXX Heisenberg model
-# -
-
-def Heisenberg_Trotter(num_qubits,trotter_steps,p,target_time):
+def Heisenberg_Trotter_1st_ord(num_qubits,trotter_steps,p,target_time):
 
 	dt = target_time/trotter_steps
 
@@ -115,9 +92,9 @@ def Heisenberg_Trotter(num_qubits,trotter_steps,p,target_time):
 	Trot_qc = QuantumCircuit(Trot_qr, name='Trot')
 	
 	for i in range(0, num_qubits - 1):
-		Trot_qc.append(ZZ, [Trot_qr[i], Trot_qr[i+1]])
-		Trot_qc.append(YY, [Trot_qr[i], Trot_qr[i+1]])
-		Trot_qc.append(XX, [Trot_qr[i], Trot_qr[i+1]])
+	    Trot_qc.append(ZZ, [Trot_qr[i], Trot_qr[i+1]])
+	    Trot_qc.append(YY, [Trot_qr[i], Trot_qr[i+1]])
+	    Trot_qc.append(XX, [Trot_qr[i], Trot_qr[i+1]])
 	
 	# Now repeat the circuit #trotter_reps
 
@@ -131,8 +108,8 @@ def Heisenberg_Trotter(num_qubits,trotter_steps,p,target_time):
 
 	# Simulate time evolution under H_heis3 Hamiltonian
 	for _ in range(trotter_steps):
-		qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
-		qc.barrier()
+  	  qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
+  	  qc.barrier()
 
 	# Evaluate simulation at target_time meaning each trotter step evolves pi/trotter_steps in time
 	qc = qc.bind_parameters({p: dt})
@@ -140,7 +117,7 @@ def Heisenberg_Trotter(num_qubits,trotter_steps,p,target_time):
 	return qc
 
 
-def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,p,target_time):
+def Heisenberg_Trotter_1st_ord_compressed(num_qubits,trotter_steps,p,target_time):
 
 	dt = target_time/trotter_steps
 
@@ -154,7 +131,7 @@ def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,p,target_time):
 	Trot_qc = QuantumCircuit(Trot_qr, name='Trot')
 	
 	for i in range(0, num_qubits - 1):
-		Trot_qc.append(XYZ, [Trot_qr[i], Trot_qr[i+1]])
+	    Trot_qc.append(XYZ, [Trot_qr[i], Trot_qr[i+1]])
 	
 	# Now repeat the circuit #trotter_reps
 
@@ -167,62 +144,57 @@ def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,p,target_time):
 
 	# Simulate time evolution under H_heis3 Hamiltonian
 	for _ in range(trotter_steps):
-		qc.append(Trot_gate, [qr[0], qr[1], qr[2]])		
-		qc.barrier()
+  	  qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
+  	  qc.barrier()
 
 	# Evaluate simulation at target_time meaning each trotter step evolves pi/trotter_steps in time
 	qc = qc.bind_parameters({p: dt})
 
 	return qc
 
+def Heisenberg_Trotter_1st_ord_YBE_4steps(num_qubits,trotter_steps,target_time):
 
-def Heisenberg_Trotter_variational(num_qubits,trotter_steps,p):
+	dt = target_time/trotter_steps
+	
+	p   = Parameter('dt')
+	ep  = Parameter('2dt')
+	eep = Parameter('3dt')
+	
+	# Combine subcircuits into a single multiqubit gate representing a single trotter step
 
+	
+	Trot_qr = QuantumRegister(num_qubits)
+	Trot_qc = QuantumCircuit(Trot_qr, name='Trot')
+	
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
+
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[0], Trot_qr[1]])
+	Trot_qc.append(R_xyz(p).to_instruction(), [Trot_qr[1], Trot_qr[2]])
+	# Now repeat the circuit #trotter_reps
+
+	Trot_gate = Trot_qc.to_instruction()
+
+
+	# Initialize quantum circuit for 3 qubits
 	qr = QuantumRegister(num_qubits)
 	qc = QuantumCircuit(qr)
-	count = 0
 
-	qc.rx(np.pi,[1,2])
 
-	for d in range(trotter_steps):
-		for i in range(num_qubits-1):
-			qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[i],qr[i+1]])
-			count += 3
+	# Simulate time evolution under H_heis3 Hamiltonian
+	
+	qc.append(Trot_gate, [qr[0], qr[1], qr[2]])
+	qc.barrier()
+
+	# Evaluate simulation at target_time meaning each trotter step evolves pi/trotter_steps in time
+	#qc = qc.bind_parameters({p: dt,ep:2*dt,eep:3*dt})
+	qc = qc.bind_parameters({p:dt})
 
 	return qc
 
 
-def Heisenberg_YBE_variational(num_qubits,p):
-
-    circ = QuantumCircuit(num_qubits)
-    count = 0
-    
-    def XYZ_variational(circ,i,j,params):
-        circ.cx(i,j)
-        circ.rx(params[0],i)
-        circ.rx(-np.pi/2,i)
-        circ.h(i)
-        circ.rz(params[1],j)
-
-        circ.cx(i,j)
-        circ.h(i)
-        circ.rz(params[2],j)
-
-        circ.cx(i,j)
-        circ.rx(np.pi/2,i)
-        circ.rx(-np.pi/2,j)
-
-    circ.rx(np.pi,[1,2])
-    
-    XYZ_variational(circ,1,2,p[count:count+3])
-    count += 3
-    XYZ_variational(circ,0,1,p[count:count+3])
-    count += 3
-    XYZ_variational(circ,1,2,p[count:count+3])
-    count += 3
-    XYZ_variational(circ,0,1,p[count:count+3])
-    count += 3
-    XYZ_variational(circ,1,2,p[count:count+3])
-    count += 3
-
-    return circ
