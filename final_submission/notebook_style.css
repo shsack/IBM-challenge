@@ -1,0 +1,43 @@
+<style>
+.output_png {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+h1 {
+    color: #3A5FBC;
+}
+
+h2 {
+    color: #3A5FBC;
+    font-weight:700;
+    font-size: 35px;
+}
+
+h3 {
+    color: #3A5FBC;
+}
+
+
+.text_cell_render p {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+
+
+li::marker {
+  color: #3A5FBC;
+  font-size:  25px;
+}
+
+a:link {
+  color: black;
+}
+
+li + li {
+  margin-top: 10px;
+}
+
+</style>

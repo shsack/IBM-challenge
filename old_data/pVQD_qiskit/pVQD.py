@@ -511,5 +511,6 @@ class pVQD:
 		log_data['times']       = times
 		log_data['params']      = list(params)
 		log_data['tot_steps']   = [tot_steps]
+		log_data['final_params']= list(self.parameters)
 
 		json.dump(log_data, open( filename,'w+'))

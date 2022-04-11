@@ -22,7 +22,7 @@ from ansatze        import *
 spins   = 3
 V       = 0.25
 g       = 1.0
-dt      = 0.0523
+dt      = np.pi/60
 n_steps = 60
 
 Jx = Jy = Jz = 1.0
@@ -35,12 +35,12 @@ depth = 4
 
 # ## Example circ
 
-ex_params = np.zeros(3*(depth)*(spins-1))
-wfn       = challenge_ansatz(spins,depth,ex_params)
+ex_params = np.zeros(15) #np.zeros(3*(depth)*(spins-1))
+wfn       = Heisenberg_YBE_variational(spins,depth,ex_params)
 
 
 ### Shift
-shift  = np.array(len(ex_params)*[0.005])
+shift  = np.array(len(ex_params)*[0.01])
 
 print("Initial shift:",shift)
 
@@ -85,7 +85,7 @@ cost = 'global'
 
 
 algo = pVQD(hamiltonian   = H,
-			ansatz        = challenge_ansatz,
+			ansatz        = Heisenberg_YBE_variational,
 			ansatz_reps   = depth,
 			parameters    = ex_params,
 			initial_shift = shift,

@@ -87,7 +87,7 @@ data   = json.load(open('data/trial_results.dat'))
 
 pvqd_params = data["params"]
 pvqd_times  = data["times"]
-pvqd_ovps   = measure_overlap_target(One^One^Zero,challenge_ansatz,pvqd_params)
+pvqd_ovps   = measure_overlap_target(One^One^Zero,Heisenberg_YBE_variational,pvqd_params)
 
 print(pvqd_params[-1])
 

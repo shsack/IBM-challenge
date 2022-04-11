@@ -1,7 +1,7 @@
+# -*- coding: utf-8 -*-
 from joblib import Parallel
 import numpy as np 
 from qiskit.opflow import Z, I
-import numba as nb
 
 
 # Useful functions
@@ -45,7 +45,6 @@ def ei(i,n):
     vi[i] = 1.0
     return vi[:]
 
-nb.njit # Use just in time compilation to speed up the gradient computation
 def adam_gradient(params,count,m,v,g):
 
     '''
@@ -71,11 +70,11 @@ def adam_gradient(params,count,m,v,g):
     # Regularization constant
     ε  = 1e-8
     # Parameter wise adaptive learning rate
-    α  = [0.001 for _ in range(len(params))]
+    α  = [0.001 for i in range(len(params))]
     if count == 0:
         count = 1
 
-    new_params = [0 for _ in range(len(params))]
+    new_params = [0 for i in range(len(params))]
 
     for i in range(len(params)):
         m[i] = β1 * m[i] + (1 - β1) * g[i]

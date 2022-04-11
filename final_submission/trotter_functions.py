@@ -10,8 +10,8 @@ from qiskit                               import QuantumCircuit, QuantumRegister
 from qiskit.providers.aer                 import QasmSimulator
 from qiskit.circuit                       import Parameter
 
- 
-## Functions for 2 qubits rotations
+
+# # Functions for 2 qubits rotations
 
 
 def R_xx(t):
