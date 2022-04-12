@@ -27,12 +27,22 @@ h3 {
 
 
 
-li::marker {
+ul li::marker {
   color: #3A5FBC;
   font-size:  25px;
 }
 
+ol li::marker {
+  color: #3A5FBC;
+  font-size:  18px;
+}
+
+
 a:link {
+  color: black;
+}
+
+a:active {
   color: black;
 }
 

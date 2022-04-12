@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
-from joblib import Parallel
 import numpy as np 
 from qiskit.opflow import Z, I
 
-
-# Useful functions
 
 def projector_zero(n_qubits):
 
