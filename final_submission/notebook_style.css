@@ -41,8 +41,13 @@ ol li::marker {
 a:link {
   color: black;
 }
-
 a:active {
+  color: black;
+}
+a:hover {
+  color: black;
+}
+a:visited {
   color: black;
 }
 
