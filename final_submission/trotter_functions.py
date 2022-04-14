@@ -109,37 +109,6 @@ def R_xyz(t):
 
     return XYZ_qc
 
-def R_xyz_var(p):
-    
-    '''
-    Circuit implementing the optimal gate decomposition of e^(-it(XX+YY+ZZ))
-    as indicated in Fig. 4b of arXiv:1907.03505v2,
-    now every gate depending on the rotation angle 't' is a parameterized gate
-    
-    Args:
-        - p: array of 3 parameters
-        
-    Returns:
-        A QuantumCircuit implementing the parameterized R_{xx+yy+zz}(p0,p1,p2) rotation with name XYZ-var
-    '''
-    
-    XYZ_qr = QuantumRegister(2)
-    XYZ_qc = QuantumCircuit(XYZ_qr, name='XYZ-var')
-    
-    XYZ_qc.cnot(0,1)
-    XYZ_qc.rx(p[0], 0)
-    XYZ_qc.rx(-np.pi/2, 0)
-    XYZ_qc.rz(p[1], 1)
-    XYZ_qc.h(0)
-    XYZ_qc.cnot(0,1)
-    XYZ_qc.h(0)
-    XYZ_qc.rz(p[2], 1)
-    XYZ_qc.cnot(0,1)
-    XYZ_qc.rx(np.pi/2,0)
-    XYZ_qc.rx(-np.pi/2,1)
-
-    return XYZ_qc
-
 
 # +
 ## Now we create the Trotter circuit for the XXX Heisenberg model
@@ -155,7 +124,7 @@ def Heisenberg_Trotter(num_qubits,trotter_steps,t,target_time):
     Args:
         - num_qubits: int, number of qubits of the system
         - trotter_steps: the number of trotter steps n to implement
-        - t: Qiskit Parameter object, will be binded to dt
+        - t: Qiskit Parameter object, target_time/trotter_steps will be bound to it
         - target_time: the simulation time we are targeting
         
     Returns:
@@ -214,7 +183,7 @@ def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,t,target_time):
     Args:
         - num_qubits: int, number of qubits of the system
         - trotter_steps: the number of trotter steps n to implement
-        - t: Qiskit Parameter object, will be binded to dt
+        - t: Qiskit Parameter object, target_time/trotter_steps will be bound to it
         - target_time: the simulation time we are targeting
         
     Returns:
@@ -254,22 +223,6 @@ def Heisenberg_Trotter_compressed(num_qubits,trotter_steps,t,target_time):
 
     # Evaluate simulation at target_time meaning each trotter step evolves target_time/trotter_steps in time
     qc = qc.bind_parameters({t: dt})
-
-    return qc
-
-
-def Heisenberg_Trotter_variational(num_qubits,trotter_steps,p):
-
-    qr = QuantumRegister(num_qubits)
-    qc = QuantumCircuit(qr)
-    count = 0
-
-    qc.rx(np.pi,[1,2])
-
-    for d in range(trotter_steps):
-        for i in range(num_qubits-1):
-            qc.append(R_xyz_var(p[count:count+3]).to_instruction(),[qr[i],qr[i+1]])
-            count += 3
 
     return qc
 

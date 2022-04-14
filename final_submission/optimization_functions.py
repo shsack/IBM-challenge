@@ -6,7 +6,7 @@ from qiskit.opflow import Z, I
 def projector_zero(n_qubits):
 
     '''
-    This function create the global projector |00...0><00...0|
+    This function creates the global projector |00...0><00...0|
     Args:
         - n_qubits: the number of qubits of the system
     Returns:
@@ -31,7 +31,7 @@ def ei(i,n):
     This is useful to implement the parameter-shift rule.
 
     Args:
-        - i: the 
+        - i: the non-zero component of the basis vector
         - n: the dimension of the vector
 
     Returns:
