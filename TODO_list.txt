@@ -1,5 +1,0 @@
-Things to do:
-
-- Create a shared folder/notebook
-- Run pVQD on Heisenberg chain
-- Add simple error mitigation
