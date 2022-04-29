@@ -9,27 +9,26 @@ The task of the [IBM Open Science Prize 2021](https://ibmquantumawards.bemyapp.c
 
 # Our Solution
 
-## Reduction of the number of CNOTs
+## 1. Reduction of the number of CNOTs
 
 As a first step, we reduced the number of CNOTs required per Trotter step, using an optimal decomposition of the XX+YY+ZZ rotation gate that requires only 3 CNOTs.
 
 ![Screenshot 2022-04-29 at 14 13 21](https://user-images.githubusercontent.com/45107198/165942166-796a8a41-9437-40ab-8871-7ff9302237ae.png)
 
-## Circuit compression using the Yang-Baxter Equivalence (YBE)
+## 2. Circuit compression using the Yang-Baxter Equivalence (YBE)
 
 Next, we use the Yang-Baxter Equivalence to represent the 4 Trotter steps with an equivalent circuit that requires only 15 CNOTs.
 
 ![Screenshot 2022-04-29 at 14 14 33](https://user-images.githubusercontent.com/45107198/165942319-917540b3-1762-48c0-86fa-45aa0332dff8.png)
 
-## Projected Variational Quantum Dynamics (pVQD)
+## 3. Projected Variational Quantum Dynamics (pVQD)
 
 We build upon the 4 Trotter steps circuit by variationally compressing higher order steps into the same circuit.
 
 ![Screenshot 2022-04-29 at 14 15 16](https://user-images.githubusercontent.com/45107198/165942462-f2d9bbbf-e443-453c-9d0b-eca02e2557e0.png)
 
 
-## Error mitigation
-
+## 4. Error mitigation
 
 Finally, we use three different techniques to mitigate errors. Namely, we use an optimal qubit routing combined with Zero Noise Extrapolation (ZNE) and removal of unphysical outputs.
 
