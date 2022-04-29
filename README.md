@@ -12,7 +12,7 @@ The task of the [IBM Open Science Prize 2021](https://ibmquantumawards.bemyapp.c
 
 # Our Solution
 
-## Reduction of the CNOTs
+## Reduction of the number of CNOTs
 
 As a first step, we reduced the number of CNOTs required per Trotter step, using an optimal decomposition of the XX+YY+ZZ rotation gate that requires only 3 CNOTs.
 
@@ -21,6 +21,8 @@ As a first step, we reduced the number of CNOTs required per Trotter step, using
 ## Circuit compression using the Yang-Baxter Equivalence (YBE)
 
 Next, we use the Yang-Baxter Equivalence to represent the 4 Trotter steps with an equivalent circuit that requires only 15 CNOTs.
+
+![Screenshot 2022-04-29 at 14 14 33](https://user-images.githubusercontent.com/45107198/165942319-917540b3-1762-48c0-86fa-45aa0332dff8.png)
 
 ## Projected Variational Quantum Dynamics (pVQD)
 
