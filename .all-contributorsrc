@@ -11,7 +11,11 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/45107198?v=4",
       "profile": "https://github.com/shsack",
       "contributions": [
-        "code"
+        "code",
+        "content",
+        "data",
+        "doc",
+        "ideas"
       ]
     }
   ],
