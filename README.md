@@ -6,7 +6,7 @@
 
 The task of the [IBM Open Science Prize 2021](https://ibmquantumawards.bemyapp.com/#/event) was to simulate a Heisenberg model Hamiltonian for three interacting atoms on IBM Quantum's 7-qubit Jakarta system. The goal was to simulate the evolution of a known quantum state with the best fidelity as possible using Trotterization. 
 
-# Contributers
+# Contributers ✨
 
 ![logo2](https://user-images.githubusercontent.com/45107198/165937297-ecf902d0-106a-4114-8fbb-66db05db4e21.png)
 
