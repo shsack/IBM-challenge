@@ -28,6 +28,8 @@ Next, we use the Yang-Baxter Equivalence to represent the 4 Trotter steps with a
 
 We build upon the 4 Trotter steps circuit by variationally compressing higher order steps into the same circuit.
 
+![Screenshot 2022-04-29 at 14 15 16](https://user-images.githubusercontent.com/45107198/165942462-f2d9bbbf-e443-453c-9d0b-eca02e2557e0.png)
+
 ## Error mitigation
 
 Finally, we use three different techniques to mitigate errors. Namely, we use an optimal qubit routing combined with Zero Noise Extrapolation (ZNE) and removal of unphysical outputs.
