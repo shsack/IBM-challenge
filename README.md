@@ -1,7 +1,4 @@
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Banner_site](https://user-images.githubusercontent.com/45107198/165936349-0fd0f1d0-8cf0-4005-8b25-d64f819ed087.png)
 
 
@@ -29,15 +26,6 @@ Next, we use the Yang-Baxter Equivalence to represent the 4 Trotter steps with a
 We build upon the 4 Trotter steps circuit by variationally compressing higher order steps into the same circuit.
 
 ![Screenshot 2022-04-29 at 14 15 16](https://user-images.githubusercontent.com/45107198/165942462-f2d9bbbf-e443-453c-9d0b-eca02e2557e0.png)
-
-<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
-<!-- prettier-ignore-start -->
-<!-- markdownlint-disable -->
-<table>
-  <tr>
-    <td align="center"><a href="https://github.com/StefanoBarison"><img src="https://avatars.githubusercontent.com/u/56699595?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefano Barison</b></sub></a><br /><a href="#design-StefanoBarison" title="Design">🎨</a> <a href="https://github.com/shsack/IBM-challenge/commits?author=StefanoBarison" title="Code">💻</a> <a href="https://github.com/shsack/IBM-challenge/commits?author=StefanoBarison" title="Documentation">📖</a> <a href="#ideas-StefanoBarison" title="Ideas, Planning, & Feedback">🤔</a></td>
-  </tr>
-</table>
 
 
 ## Error mitigation
