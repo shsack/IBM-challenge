@@ -46,7 +46,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tr>
     <td align="center"><a href="https://github.com/shsack"><img src="https://avatars.githubusercontent.com/u/45107198?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefan Hermann Sack</b></sub></a><br /><a href="https://github.com/shsack/IBM-challenge/commits?author=shsack" title="Code">💻</a></td>
-    <td align="center"><a href="https://github.com/StefanoBarison"><img src="https://avatars.githubusercontent.com/u/56699595?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefano Barison</b></sub></a><br /><a href="#design-StefanoBarison" title="Design">🎨</a></td>
+    <td align="center"><a href="https://github.com/StefanoBarison"><img src="https://avatars.githubusercontent.com/u/56699595?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefano Barison</b></sub></a><br /><a href="#design-StefanoBarison" title="Design">🎨</a> <a href="https://github.com/shsack/IBM-challenge/commits?author=StefanoBarison" title="Code">💻</a></td>
   </tr>
 </table>
 
