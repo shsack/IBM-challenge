@@ -12,19 +12,23 @@ The task of the [IBM Open Science Prize 2021](https://ibmquantumawards.bemyapp.c
 
 # Our Solution
 
-## Reduction of the CNOTs
+## Reduction of the number of CNOTs
+
+As a first step, we reduced the number of CNOTs required per Trotter step, using an optimal decomposition of the XX+YY+ZZ rotation gate that requires only 3 CNOTs.
+
+![Screenshot 2022-04-29 at 14 13 21](https://user-images.githubusercontent.com/45107198/165942166-796a8a41-9437-40ab-8871-7ff9302237ae.png)
 
 ## Circuit compression using the Yang-Baxter Equivalence (YBE)
 
+Next, we use the Yang-Baxter Equivalence to represent the 4 Trotter steps with an equivalent circuit that requires only 15 CNOTs.
+
+![Screenshot 2022-04-29 at 14 14 33](https://user-images.githubusercontent.com/45107198/165942319-917540b3-1762-48c0-86fa-45aa0332dff8.png)
+
 ## Projected Variational Quantum Dynamics (pVQD)
 
-## Error mitigation
+We build upon the 4 Trotter steps circuit by variationally compressing higher order steps into the same circuit.
 
-![presentation_challenge](https://user-images.githubusercontent.com/45107198/165741152-e51cc377-c94a-4b98-a3e7-22f59233235e.png)
-
-## Contributors ✨
-
-Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+![Screenshot 2022-04-29 at 14 15 16](https://user-images.githubusercontent.com/45107198/165942462-f2d9bbbf-e443-453c-9d0b-eca02e2557e0.png)
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -36,9 +40,11 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
   </tr>
 </table>
 
-<!-- markdownlint-restore -->
-<!-- prettier-ignore-end -->
 
-<!-- ALL-CONTRIBUTORS-LIST:END -->
+## Error mitigation
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+Finally, we use three different techniques to mitigate errors. Namely, we use an optimal qubit routing combined with Zero Noise Extrapolation (ZNE) and removal of unphysical outputs.
+
+![Screenshot 2022-04-29 at 14 15 59](https://user-images.githubusercontent.com/45107198/165942590-e06c45ba-4b78-41fc-bc64-b1dc2c969da4.png)
+
