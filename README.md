@@ -30,7 +30,19 @@ We build upon the 4 Trotter steps circuit by variationally compressing higher or
 
 ![Screenshot 2022-04-29 at 14 15 16](https://user-images.githubusercontent.com/45107198/165942462-f2d9bbbf-e443-453c-9d0b-eca02e2557e0.png)
 
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/shsack"><img src="https://avatars.githubusercontent.com/u/45107198?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefan Hermann Sack</b></sub></a><br /><a href="https://github.com/shsack/IBM-challenge/commits?author=shsack" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/StefanoBarison"><img src="https://avatars.githubusercontent.com/u/56699595?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefano Barison</b></sub></a><br /><a href="#design-StefanoBarison" title="Design">🎨</a> <a href="https://github.com/shsack/IBM-challenge/commits?author=StefanoBarison" title="Code">💻</a> <a href="https://github.com/shsack/IBM-challenge/commits?author=StefanoBarison" title="Documentation">📖</a> <a href="#ideas-StefanoBarison" title="Ideas, Planning, & Feedback">🤔</a></td>
+  </tr>
+</table>
+
+
 ## Error mitigation
+
 
 Finally, we use three different techniques to mitigate errors. Namely, we use an optimal qubit routing combined with Zero Noise Extrapolation (ZNE) and removal of unphysical outputs.
 
