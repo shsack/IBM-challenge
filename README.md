@@ -34,6 +34,7 @@ We build upon the 4 Trotter steps circuit by variationally compressing higher or
 
 Finally, we use three different techniques to mitigate errors. Namely, we use an optimal qubit routing combined with Zero Noise Extrapolation (ZNE) and removal of unphysical outputs.
 
+![Screenshot 2022-04-29 at 14 15 59](https://user-images.githubusercontent.com/45107198/165942590-e06c45ba-4b78-41fc-bc64-b1dc2c969da4.png)
 
 ## Contributors ✨
 
