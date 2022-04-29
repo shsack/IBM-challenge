@@ -8,7 +8,7 @@ The task of the [IBM Open Science Prize 2021](https://ibmquantumawards.bemyapp.c
 
 # Contributers
 
-![Logo](https://user-images.githubusercontent.com/45107198/165936613-3e68ba8e-0146-4120-bc39-eb41ba8b096a.png)
+![logo2](https://user-images.githubusercontent.com/45107198/165937297-ecf902d0-106a-4114-8fbb-66db05db4e21.png)
 
 
 # Our Solution
