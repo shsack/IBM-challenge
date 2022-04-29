@@ -1,6 +1,6 @@
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 ![Banner_site](https://user-images.githubusercontent.com/45107198/165936349-0fd0f1d0-8cf0-4005-8b25-d64f819ed087.png)
 
@@ -31,8 +31,8 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/StefanoBarison"><img src="https://avatars.githubusercontent.com/u/56699595?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefano Barison</b></sub></a><br /><a href="https://github.com/shsack/IBM-challenge/commits?author=StefanoBarison" title="Code">💻</a></td>
     <td align="center"><a href="https://github.com/shsack"><img src="https://avatars.githubusercontent.com/u/45107198?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefan Hermann Sack</b></sub></a><br /><a href="https://github.com/shsack/IBM-challenge/commits?author=shsack" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/StefanoBarison"><img src="https://avatars.githubusercontent.com/u/56699595?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Stefano Barison</b></sub></a><br /><a href="#design-StefanoBarison" title="Design">🎨</a></td>
   </tr>
 </table>
 
