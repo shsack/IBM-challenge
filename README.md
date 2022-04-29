@@ -9,6 +9,10 @@ The task of the [IBM Open Science Prize 2021](https://ibmquantumawards.bemyapp.c
 
 # Our Solution
 
+Our solution to the problem can be found in ``main_notebook.ipynb`` contained in the ``final_submission`` file. All installation requirements to run the notebook and further details can be found inside. 
+
+Below we briefly summarize our approach.
+
 ## 1. Reduction of the number of CNOTs
 
 As a first step, we reduced the number of CNOTs required per Trotter step, using an optimal decomposition of the XX+YY+ZZ rotation gate that requires only 3 CNOTs.
