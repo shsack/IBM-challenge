@@ -9,7 +9,7 @@ The task of the [IBM Open Science Prize 2021](https://ibmquantumawards.bemyapp.c
 
 # Our Solution
 
-Our solution to the problem can be found in ``main_notebook.ipynb`` contained in the ``final_submission`` file. All installation requirements and further details can be found in the notebook. 
+Our solution to the problem can be found in ``main_notebook.ipynb`` contained in the ``final_submission`` file. All installation requirements and further details can be found inside the notebook. 
 
 Below we briefly summarize our approach.
 
